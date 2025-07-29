@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+
       - name: Make build script executable
         run: chmod +x ./build.sh
 
