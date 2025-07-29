@@ -1,0 +1,34 @@
+name: Build and Prepare Chrome Extension
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make build script executable
+        run: chmod +x ./build.sh
+
+      - name: Run Chrome build (-c)
+        run: ./build.sh -c
+
+      - name: Install to tmp-chrome/carrot (simulate install step)
+        run: |
+          mkdir -p tmp-chrome/carrot
+          echo "Installed to tmp-chrome/carrot"
+
+      - name: Build final release zip (-f -c -z)
+        run: ./build.sh -f -c -z
+
+      - name: Upload release zip files
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-zips
+          path: release/*.zip
